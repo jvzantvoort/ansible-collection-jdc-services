@@ -1,4 +1,4 @@
-# Ansible Collection - jvzantvoort.services
+# Ansible Collection - jdc.services
 
 This is for testing demo purposes only it uses molecule together
 with GCE to run simple tests.
