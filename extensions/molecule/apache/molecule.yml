@@ -1,0 +1,31 @@
+---
+platforms:
+  - name: "${rocky8_name}"
+    image: "${rocky8_image}"
+    zone: "${gcp_zone}"
+    region: "${gcp_region}"
+    cred_file: "${gcp_cred_file}"
+    cred_kind: "${gcp_cred_kind}"
+    machine_type: "${gcp_machine_type}"
+    project: "${gcp_project}"
+  - name: "${rocky9_name}"
+    image: "${rocky9_image}"
+    zone: "${gcp_zone}"
+    region: "${gcp_region}"
+    cred_file: "${gcp_cred_file}"
+    cred_kind: "${gcp_cred_kind}"
+    machine_type: "${gcp_machine_type}"
+    project: "${gcp_project}"
+provisioner:
+  name: ansible
+  log: true
+  playbooks:
+    create: ../default/create.yml
+    destroy: ../default/destroy.yml
+  inventory:
+    links:
+      group_vars: ../default/inventory/group_vars/
+  env:
+    ANSIBLE_ROLES_PATH: ../../../roles
+...
+

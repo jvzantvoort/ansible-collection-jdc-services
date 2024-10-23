@@ -1,0 +1,72 @@
+---
+
+- name: Create an IP address for instance
+  google.cloud.gcp_compute_address:
+    name: "{{ item.name }}-ip"
+    region: "{{ item.region }}"
+    project: "{{ item.project }}"
+    service_account_file: "{{ item.cred_file }}"
+    auth_kind: "{{ item.cred_kind }}"
+  register: gce_ip
+
+- name: Create a vm
+  google.cloud.gcp_compute_instance:
+    name: "{{ item.name }}"
+    machine_type: "{{ item.machine_type }}"
+    disks:
+      - auto_delete: true
+        boot: true
+        initialize_params:
+          source_image: "{{ item.image }}"
+    network_interfaces:
+      - access_configs:
+          - name: External NAT
+            nat_ip: "{{ gce_ip }}"
+            type: ONE_TO_ONE_NAT
+    tags:
+      items:
+        - http-server
+        - https-server
+    zone: "{{ item.zone }}"
+    project: "{{ item.project }}"
+    service_account_file: "{{ item.cred_file }}"
+    auth_kind: "{{ item.cred_kind }}"
+
+- name: Wait for SSH for instance
+  wait_for:
+    host: "{{ gce_ip.address }}"
+    port: 22
+    delay: 5
+    sleep: 5
+    state: started
+    timeout: 100
+
+- name: Print statements during execution
+  ansible.builtin.debug:
+    msg: "IP address for {{ gce_ip.address }}"
+
+- name: Force inventory refresh
+  ansible.builtin.meta: refresh_inventory
+
+- name: Add vm to molecule_inventory
+  vars:
+    inventory_partial_yaml: |
+      all:
+        children:
+          molecule:
+            hosts:
+              "{{ item.name }}":
+                ansible_host: "{{ gce_ip.address }}"
+
+  ansible.builtin.set_fact:
+    molecule_inventory: >
+      {{ molecule_inventory | combine(inventory_partial_yaml | from_yaml, recursive=true) }}
+
+- name: Dump molecule_inventory
+  ansible.builtin.copy:
+    content: "{{ molecule_inventory | to_yaml }}"
+    dest: "{{ molecule_ephemeral_directory }}/inventory/molecule_inventory.yml"
+    mode: "0600"
+
+- name: Force inventory refresh
+  ansible.builtin.meta: refresh_inventory

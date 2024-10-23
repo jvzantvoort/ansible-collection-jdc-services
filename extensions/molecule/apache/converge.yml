@@ -1,0 +1,11 @@
+---
+- name: Converge
+  hosts: molecule
+
+  tasks:
+    - name: Run the role
+      become: true
+      block:
+        - name: Implement the role
+          ansible.builtin.include_role:
+            name: apache

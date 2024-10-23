@@ -1,0 +1,11 @@
+---
+- name: Generic OS package manager
+  ansible.builtin.package:
+    name: httpd
+    state: present
+
+- name: Manage  service
+  ansible.builtin.service:
+    name: httpd
+    enabled: true
+    state: started

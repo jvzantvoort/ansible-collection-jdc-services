@@ -1,0 +1,47 @@
+---
+- name: Verify results
+  hosts: molecule
+  vars:
+    httpd_required_packages_test:
+      - httpd
+
+    httpd_required_services_test:
+      - httpd.service
+
+  tasks:
+    - name: Check installed packages
+      become: true
+      block:
+
+        - name: Gather the package facts
+          ansible.builtin.package_facts:
+
+        - name: Check if packages are installed
+          ansible.builtin.assert:
+            that:
+              - packagename in ansible_facts.packages
+            fail_msg: "{{ packagename }} is not installed"
+            success_msg: "{{ packagename }} is installed"
+          loop: "{{ httpd_required_packages_test }}"
+          loop_control:
+            loop_var: packagename
+
+    - name: Check installed services
+      become: true
+      block:
+
+        - name: Gather the package facts
+          ansible.builtin.service_facts:
+
+        - name: Check if services are installed
+          ansible.builtin.assert:
+            that:
+              - ansible_facts.services[servicename] is defined
+              - ansible_facts.services[servicename].status == "enabled"
+              - ansible_facts.services[servicename].state == "running"
+            fail_msg: "{{ servicename }} is not enabled and running"
+            success_msg: "{{ servicename }} is enabled and running"
+          loop: "{{ httpd_required_services_test }}"
+          loop_control:
+            loop_var: servicename
+...
