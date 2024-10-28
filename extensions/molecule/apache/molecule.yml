@@ -7,13 +7,6 @@ platforms:
     machine: "${machine}"
     network: "${network}"
 
-      #  - name: "${rocky9_name}"
-      #    template: "${rocky9_image}"
-      #    disk: "${pool}/${rocky9_name}-sda.qcow2"
-      #    memory: "${memory}"
-      #    machine: "${machine}"
-      #    network: "${network}"
-
 provisioner:
   name: ansible
   log: true

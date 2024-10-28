@@ -16,8 +16,8 @@
     - name: Undefine the VM
       changed_when: false
       community.libvirt.virt:
+        command: undefine
         name: "{{ item.name }}"
-        force: true
       ignore_errors: true
 
 - name: Shutdown and remove existing machine

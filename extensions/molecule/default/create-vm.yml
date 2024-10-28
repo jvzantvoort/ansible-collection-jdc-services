@@ -16,7 +16,6 @@
 
     - name: Define the virtual machine
       community.libvirt.virt:
-        name: "{{ item.name }}"
         command: define
         xml: "{{ lookup('template', 'template.xml.j2') }}"
       register: vm_result
