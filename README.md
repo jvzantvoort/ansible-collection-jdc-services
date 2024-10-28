@@ -5,7 +5,8 @@ with GCE to run simple tests.
 
 ## Testing
 
-create a file ``extensions/.env.yml``
+* Install ``libvirt-python``.
+* create a file ``extensions/.env.yml``
 
 ```yaml
 ---
@@ -19,3 +20,5 @@ rocky9_name: rhel9
 rocky9_image: /var/lib/libvirt/images/rocky9_ansible/rocky9.04-minimal-1.qcow2
 ...
 ```
+
+Note: you must be able to login through ansible
