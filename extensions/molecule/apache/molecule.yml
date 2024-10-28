@@ -1,21 +1,19 @@
 ---
 platforms:
   - name: "${rocky8_name}"
-    image: "${rocky8_image}"
-    zone: "${gcp_zone}"
-    region: "${gcp_region}"
-    cred_file: "${gcp_cred_file}"
-    cred_kind: "${gcp_cred_kind}"
-    machine_type: "${gcp_machine_type}"
-    project: "${gcp_project}"
-  - name: "${rocky9_name}"
-    image: "${rocky9_image}"
-    zone: "${gcp_zone}"
-    region: "${gcp_region}"
-    cred_file: "${gcp_cred_file}"
-    cred_kind: "${gcp_cred_kind}"
-    machine_type: "${gcp_machine_type}"
-    project: "${gcp_project}"
+    template: "${rocky8_image}"
+    disk: "${pool}/${rocky8_name}-sda.qcow2"
+    memory: "${memory}"
+    machine: "${machine}"
+    network: "${network}"
+
+      #  - name: "${rocky9_name}"
+      #    template: "${rocky9_image}"
+      #    disk: "${pool}/${rocky9_name}-sda.qcow2"
+      #    memory: "${memory}"
+      #    machine: "${machine}"
+      #    network: "${network}"
+
 provisioner:
   name: ansible
   log: true
@@ -28,4 +26,3 @@ provisioner:
   env:
     ANSIBLE_ROLES_PATH: ../../../roles
 ...
-

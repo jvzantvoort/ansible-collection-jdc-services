@@ -1,18 +1,29 @@
 ---
-- name: Destroy a vm
-  google.cloud.gcp_compute_instance:
-    name: "{{ item.name }}"
-    zone: "{{ item.zone }}"
-    project: "{{ item.project }}"
-    service_account_file: "{{ item.cred_file }}"
-    auth_kind: "{{ item.cred_kind }}"
-    state: absent
+- name: List all VMs
+  community.libvirt.virt:
+    command: list_vms
+  register: all_vms
 
-- name: Destroy an IP address for instance
-  google.cloud.gcp_compute_address:
-    name: "{{ item.name }}-ip"
-    region: "{{ item.region }}"
-    project: "{{ item.project }}"
-    service_account_file: "{{ item.cred_file }}"
-    auth_kind: "{{ item.cred_kind }}"
-    state: absent
+- name: Shutdown and remove existing machine
+  when: item.name in all_vms.list_vms
+  block:
+
+    - name: Stop the VM
+      community.libvirt.virt:
+        name: "{{ item.name }}"
+        state: shutdown
+
+    - name: Undefine the VM
+      changed_when: false
+      community.libvirt.virt:
+        name: "{{ item.name }}"
+        force: true
+      ignore_errors: true
+
+- name: Shutdown and remove existing machine
+  become: true
+  block:
+    - name: Remove disk
+      ansible.builtin.file:
+        path: "{{ item.disk }}"
+        state: absent
