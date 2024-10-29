@@ -11,7 +11,7 @@
       copy:
         src: "{{ item.template }}"
         dest: "{{ item.disk }}"
-        remote_src: yes
+        remote_src: true
       register: template_copy
 
     - name: Define the virtual machine
