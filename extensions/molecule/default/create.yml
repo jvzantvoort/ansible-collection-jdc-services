@@ -14,7 +14,7 @@
 
     - name: Include tasks for platforms
       ansible.builtin.include_tasks:
-        file: create-vm.yml
+        file: tasks/create-vm.yml
       loop: "{{ molecule_yml.platforms }}"
 
     - name: Fail if molecule group is missing
