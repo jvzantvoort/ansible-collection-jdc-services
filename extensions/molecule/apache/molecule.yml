@@ -8,14 +8,6 @@ platforms:
     cred_kind: "${gcp_cred_kind}"
     machine_type: "${gcp_machine_type}"
     project: "${gcp_project}"
-  - name: "${rocky9_name}"
-    image: "${rocky9_image}"
-    zone: "${gcp_zone}"
-    region: "${gcp_region}"
-    cred_file: "${gcp_cred_file}"
-    cred_kind: "${gcp_cred_kind}"
-    machine_type: "${gcp_machine_type}"
-    project: "${gcp_project}"
 provisioner:
   name: ansible
   log: true
@@ -25,7 +17,15 @@ provisioner:
   inventory:
     links:
       group_vars: ../default/inventory/group_vars/
+    host_vars:
+      instance:
+        ansible_user: ${gcp_user}
+  config_options:
+    defaults:
+      remote_user: ${gcp_user}  # fallback option
   env:
     ANSIBLE_ROLES_PATH: ../../../roles
+    ANSIBLE_LIBSSH_HOST_KEY_CHECKING: false
+    PY_COLORS: '1'
+    ANSIBLE_FORCE_COLOR: '1'
 ...
-

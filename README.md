@@ -15,6 +15,7 @@ gcp_region: europe-west4
 gcp_zone: europe-west4-a
 gcp_machine_type: e2-small
 gcp_project: PROJECT
+gcp_user: USERNAME
 rocky8_name: rhel8
 rocky8_image: projects/rocky-linux-cloud/global/images/rocky-linux-8-v20241009
 rocky9_name: rhel9
