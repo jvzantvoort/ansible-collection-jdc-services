@@ -22,3 +22,5 @@ rocky9_name: rhel9
 rocky9_image: projects/rocky-linux-cloud/global/images/rocky-linux-9-v20241009
 ...
 ```
+
+[![Cool screen](https://img.youtube.com/vi/uHfP0cP75rE/0.jpg)](https://www.youtube.com/watch?v=uHfP0cP75rE)
